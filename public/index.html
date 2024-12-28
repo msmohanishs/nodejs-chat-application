@@ -1,0 +1,70 @@
+<!-- create a sample html for chat application with style -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat Application</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+    </head>
+    <body>
+        <div class="container">
+            <div class="chat-window">
+                <div class="chat-header">
+                    <h2>Chat Application</h2>
+                    <p>Welcome to the chat application</p>
+                    <p>Please enter your name:</p>
+                    <input type="text" id="name" placeholder="Enter your name">
+                    <button id="join">Join</button>
+                    <p>Please enter your message:</p>
+                    <input type="text" id="message" placeholder="Enter your message">
+                    <button id="send">Send</button>
+                    <button id="leave">Leave</button>
+                </div>
+                <div class="chat-messages">
+                    <div class="chat-message user">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        $(document).ready(function () {
+            const socket = io();
+    
+            // Join the chat
+            $('#join').click(() => {
+                const name = $('#name').val().trim();
+                if (name) {
+                    socket.emit('join', name);
+                    $('#name').prop('disabled', true);
+                    $('#join').prop('disabled', true);
+                }
+            });
+    
+            // Send a message
+            $('#send').click(() => {
+                const message = $('#message').val().trim();
+                if (message) {
+                    socket.emit('message', message);
+                    $('#message').val('');
+                }
+            });
+    
+            // Leave the chat
+            $('#leave').click(() => {
+                location.reload();
+            });
+    
+            // Display messages
+            socket.on('message', (msg) => {
+                $('.chat-messages').append(`<div class="chat-message">${msg}</div>`);
+            });
+        });
+    </script>
+    
+</html>
+   
+        
+    
